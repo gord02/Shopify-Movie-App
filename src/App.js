@@ -1,25 +1,29 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { Component } from 'react'
+import Nominated from "./components/nominated";
+import Home from "./components/home";
+import Search from "./components/search";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <Router>
+
+            {/* Switch is used to prevent multiple components from running at once when using routing */}
+            <Switch>
+                {/* <Route exact path="/" component={Home} /> */}
+                <Route  exact path="/search" component={Search} />
+                {/* <Route  exact path="/nominated" component={Nominated} /> */}
+                {/* <Route  exact path="/checkin/history" component={History} /> */}
+            </Switch>
+        </Router>
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
