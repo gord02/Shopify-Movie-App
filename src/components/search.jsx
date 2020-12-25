@@ -1,5 +1,7 @@
 import React, { Component, Link } from 'react';
 import axios from 'axios';
+import '../search.css';
+
 
 
 class Search extends Component {
@@ -12,6 +14,7 @@ class Search extends Component {
         this.removeNomination = this.removeNomination.bind(this);
         // this.Print = this.Print.bind(this);
         this.state = {
+            inputData:'',
             movie: {},
             nominations:[],
             isNominated: {}
@@ -21,6 +24,7 @@ class Search extends Component {
     searchMovie(event) {
         event.preventDefault();
         let rawTitle= this.movieTitleInput.value;
+        this.setState({InputData: rawTitle});
         // console.log("title: ",rawTitle);
         let title = rawTitle.replace(' ', '+');
         // console.log("new title: ",title);
@@ -99,6 +103,7 @@ class Search extends Component {
             this.updateList();
         });
     }
+
     updateList() {
         let movie = this.state.movie;
         console.log("movie: ", movie);
@@ -147,26 +152,61 @@ class Search extends Component {
     nominationList() {
         let thisKeyword= this;
         let array= this.state.nominations;
-        console.log("nomination: ", this.state.nominations, "typeOf: ", typeof(this.state.nominations));
+        // console.log("nomination: ", this.state.nominations, "typeOf: ", typeof(this.state.nominations));
+        let List= [];
+        let len= array.length;
+        console.log("len: ", len);
+        for(let i=0; i<len;i++) {
+            List.push(array[i]);
+        }
+        console.log("List: ", List, typeof(List));
+        return(
+            <React.Fragment>
+                {Object.keys(array).map((i) => (
+                    <li key={i}> 
+                        {array[i].title} "({array[i].year})" <button>Remove</button>
+                        {/* {object[i].title} "{object[i].year}" <button>Remove</button> */}
+                    </li>
+                ))}
+        
+            </React.Fragment>
+            // <h1>Hello</h1>
+        );
     }
 
     render() {
         return (
             <React.Fragment>
-            <form onSubmit={(event) => { this.searchMovie(event) }}>
-                    <div className="form-group">
-                        <label htmlFor="exampleInputEmail1">Movie Title</label>
-                        <input type="name" className="form-control" id="title" aria-describedby="MovieTitle" placeholder="Enter movie title" ref={(input) => { this.movieTitleInput = input }} required></input>
+                <div className='container'>
+                    <h1>The Shoppies</h1>
+                </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col"  id="grid">
+                            <form onSubmit={(event) => { this.searchMovie(event) }}>
+                                <div className="form-group">
+                                    <label htmlFor="exampleInputEmail1">Movie Title</label>
+                                    <input type="name" className="form-control" id="title" aria-describedby="MovieTitle" placeholder="Enter movie title" ref={(input) => { this.movieTitleInput = input }} required></input>
+                                    <button type="submit" className="btn btn-primary"><i className="bi bi-search">Search</i></button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <button type="submit" className="btn btn-primary">Submit</button>
-            </form>
-
-            {this.display()}
-
-            <button onClick={()=> {this.nominationList()}} type="button" className="btn btn-primary">View nominations</button>
-            {/* {this.Print()} */}
-            {/* <Link to='/movie'> <button type="submit" className="btn btn-primary">Submit</button></Link> */}
-
+                    <div className="row" >
+                        <div className="col" id="grid">
+                        {this.state.movie !== {}
+                        ? <h2>Results</h2>
+                        : <h2>Results for "{this.state.inputData}"</h2>
+                        }
+                            {this.display()}
+                        </div>
+                        <div className="col" id="grid">
+                            <h2>Nominations</h2>
+                            {/* <button onClick={()=> {this.nominationList()}} type="button" className="btn btn-primary">View nominations</button> */}
+                            {this.nominationList()}
+                        </div>
+                    </div>
+                </div>
             </React.Fragment>
         );
     }
