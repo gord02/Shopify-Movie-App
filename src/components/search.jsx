@@ -13,9 +13,6 @@ class Search extends Component {
         // this.Print = this.Print.bind(this);
         this.state = {
             movie: {},
-            title:'',
-            year:'',
-            plot:'',
             nominations:[],
             isNominated: {}
         };
@@ -36,115 +33,121 @@ class Search extends Component {
         .then((response) => {
             // console.log(response.data);
             const movieData=  response.data;
-            let title= movieData.Title;
-            let year= movieData.Year;
-            let plot= movieData.Plot;
-            let movie = {title:title, year:year, isNominee:false, id:title+year};
-            if(this.state.title !== title) {
-                this.setState({title: title});
-                this.setState({year: year});
-                this.setState({plot: plot});
+            const year= movieData.Year;
+            const newTitle= movieData.Title;
+            let movie = {title:newTitle, year:year, plot:movieData.Plot, isNominee:false, id:(newTitle+year)};
+            if(this.state.nominations.length === 0) {
                 this.setState({movie: movie});
+            }
+            for(let i=0; i< this.state.nominations.length; i++) {
+                // console.log(this.state.nominations);
+                if( this.state.nominations[i].id === movie.id) {
+                    console.log("here");
+                    // this.setState();
+                    this.setState({movie: this.state.nominations[i]}, function() {
+                        console.log ("current movie: ", this.state.movie);
+                    });
+                }else{
+                    console.log("else");
+                     this.setState({movie: movie});   
+                }
             }
         });
     }
 
     display() {
-        let movie= this.state.movie;
-        if(this.state.title !== '') {
-            // let movie = {title:this.state.title, year:this.state.year};
-            // let isNominated= true
-            // let movie = {title:title, year:year};
-            // let isMovieNominated = async (isNominated, movie) => { 
-            //     isNominated= true
-            //     movie = {title:title, year:year};
-            //     console.log("movie: ", movie);
-            // };
-            // isMovieNominated(isNominated, movie).then( () => {
-            //     for (let i = 0; i < this.state.nominations.length; i++) {
-            //         // console.log("yo");
-            //         if (this.state.nominations[i] !== movie) {
-            //             isNominated= false
-            //         }      
-            //     }
-            //     return isNominated;
-            // });
-            // if(this.isNominatedCheck(movie) === false){
-            //     // console.log("is nominated");
-            //     // this.setState({ nominations: [this.state.nominations,  movie] });
-            //     // this.setState({ nominations: this.state.nominations.concat([movie])});
-            //     // this.setState({isNominated: true});    
-            // }
-          
+        let movie = this.state.movie;
+        console.log("movie: ", movie);
+        // console.log("movie: ", movie, typeof(movie));
+        // console.log("keys: ", Object.keys(movie));
+        let keyLength= Object.keys(movie);
+        if(keyLength.length !== 0 ) {    
             return(
-                // <React.Fragment>
+                <React.Fragment>
                     <div className="container">
-                    <h3>{this.state.title}</h3>
-                    <h5>{this.state.year}</h5>
-                    <p>{this.state.plot}</p>
+                    <h3>{movie.title}</h3>
+                    <h5>{movie.year}</h5>
+                    <p>{movie.plot}</p>
                     {/* conditional rendering for remove nomination button */}
                     {movie['isNominee']
-                        ? <button onClick={() => {this.removeNomination(movie)}}> Remove Nomination</button> 
-                        : <button onClick={() => {this.nominate(movie )}}>Nominate</button> 
+                        ? <button onClick={() => {this.removeNomination()}}> Remove Nomination</button> 
+                        : <button onClick={() => {this.nominate( )}}>Nominate</button> 
                     }
-         
                     </div>
-                // </React.Fragment>
+                </React.Fragment>
             );
         }
 
     }
 
-    nominate(movie) {
+    nominate() {
+        let movie = this.state.movie;
         // object of movie
-        // let movie = {title:title, year:year, isNominee:false};
         console.log("movie: ", movie);
         // this.setState({isNominated: {movie: true}});
-        this.setState({movie: {isNominee: true}});
-        this.setState({ nominations: this.state.nominations.concat([movie])});
 
-        // if(this.isNominatedCheck(movie) === false){
-        //     console.log("is nominated");
-        //     // this.setState({ nominations: [this.state.nominations,  movie] });
-        //     this.setState({ nominations: this.state.nominations.concat([movie])});
-        //     // this.setState({isNominated: true});    
-        // }
+        this.setState(prevState => {
+            // creating copy of state variable movie
+            let movie = Object.assign({}, prevState.movie); 
+            // update the name property, assign a new value  
+            movie.isNominee = true;    
+            // console.log("122 movie: ", movie);
+            // return new object movie object to be set to state                         
+            return { movie };                              
+        }, () =>{
+            console.log("nominee is updated");
+            this.updateList();
+        });
     }
-    // isNominatedCheck(movie) {
-    //     let i= 0;
-    //     while(i < (this.state.nominations.length + 1)) {
-    //         // console.log("yo");
-    //         if (this.state.nominations[i] === movie) {
-    //             return true;
-    //         }
-    //         i++;
-    //     }
-    //     return false;
-    // } 
-  
+    updateList() {
+        let movie = this.state.movie;
+        console.log("movie: ", movie);
+        this.setState({ nominations: this.state.nominations.concat([movie])});
+    }
+
+    removeNomination() {
+        console.log("Is run");
+        let movie = this.state.movie;
+        // let index = this.state.nominations.findIndex(x => x['id'] === movie['id']);
+        let i=0;
+        for( i; i<this.state.nominations.length; i++) {
+            console.log("Is iterated");
+            if(this.state.nominations[i]['id'] === movie['id']){
+                // return i;
+            }
+        }
+        console.log("Is iterated");
+        let index = i;
+        console.log("index: ", i);
+        // let index = this.state.nominations.findIndex(x => x.title === title);
+        // console.log("index value: ", this.state.nominations[index]);
+        // this.setState({ 
+        //     arrayvar: this.state.arrayvar.concat([newelement])
+        //   })
+        let newList= this.state.nominations
+        let editedList= newList.splice(index, 1);
+        this.setState({nominations: editedList});
+        console.log("edited list: ", editedList);
+        
+        // const newList = this.state.nominations.splice(index, 1);
+        // console.log("newlist: ", newList);
+        // this.setState({nominations: newList});
+
+
+        this.setState(prevState => {
+            // creating copy of state variable movie
+            let movie = Object.assign({}, prevState.movie); 
+            // update the name property, assign a new value  
+            movie.isNominee = false;          
+            // return new object movie object to be set to state                         
+            return { movie };                              
+        });
+    }
+
     nominationList() {
         let thisKeyword= this;
         let array= this.state.nominations;
-        console.log("isNominated: ", this.state.isNominated);
         console.log("nomination: ", this.state.nominations, "typeOf: ", typeof(this.state.nominations));
-        // this.Print(array); 
-        
-        // console.log("nomination value: ", this.state.isNominated['movie'], "typeOf: ", typeof(this.state.isNominated.value));
-        // console.log("nomination object: ", this.state.isNominated, "typeOf: ", typeof(this.state.isNominated));
-    }
-
-    removeNomination(movie) {
-        // let movie = {title:title, year:year};
-        // this.nominationList();
-        // this.setState({ nominations: [this.state.nominations,  movie] }); 
-        
-        let index = this.state.nominations.findIndex(x => x['id'] === movie['id']);
-        console.log("index value: ", this.state.nominations[index]);
-        const newList = this.state.nominations.splice(index, 1);
-        this.setState({nominations: newList});
-        this.setState({movie: {isNominee: false}});
-        // this.setState({isNominated: {movie:false}});
-        // this.nominationList();
     }
 
     render() {
