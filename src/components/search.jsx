@@ -15,10 +15,12 @@ class Search extends Component {
         // this.Print = this.Print.bind(this);
         this.state = {
             inputData:'',
-            movie: {},
+            movies: {},
             nominations:[],
             isNominated: {},
-            isSearched: false
+            isNominee: true,
+            isSearched: false,
+
         };
     };
 
@@ -30,7 +32,7 @@ class Search extends Component {
         let title = rawTitle.replace(' ', '+');
         // console.log("new title: ",title);
         let apiKey= '&apikey=e36df1a5&'
-        let urlInsertion= "t="+title + apiKey
+        let urlInsertion= "s="+title + apiKey
         // console.log("url: ", urlInsertion);
         let url= 'http://www.omdbapi.com/?' + urlInsertion
         
@@ -38,16 +40,28 @@ class Search extends Component {
         .then((response) => {
             // console.log(response.data);
             const movieData=  response.data;
-            const year= movieData.Year;
-            const newTitle= movieData.Title;
-            let movie = {title:newTitle, year:year, plot:movieData.Plot, isNominee:false, id:(newTitle+year)};
-            // const undefined= movie.id; 
+            console.log("Movie Data: ",movieData);
+            const movies= response.data.Search;
+            // for(let i=0; i<movies.length; i++) {
+
+            // }
+            // ============
+            // const year= movieData.Year;
+            // const newTitle= movieData.Title;
+            // let movie = {title:newTitle, year:year, plot:movieData.Plot, isNominee:false, id:(newTitle+year)};
+            // ===========
+            for(let i=0; i<movies.length;i++) {
+                movies[i].isNominee = false;
+                // var person = {fname:"John", lname:"Doe", age:25};
+            }
+            console.log(movies);
             if(this.state.nominations.length === 0) {
-                this.setState({movie: movie});
+                // this.setState({movie: movie});
+                this.setState({movies: movies});
             }
             for(let i=0; i< this.state.nominations.length; i++) {
                 // console.log(this.state.nominations);
-                if( this.state.nominations[i].id === movie.id) {
+                if( this.state.nominations[i].id === movies[i].imdbID) {
                     console.log("here");
                     this.setState({isSearched: true});
                     // this.setState();
@@ -57,35 +71,63 @@ class Search extends Component {
                     });
                 }else{
                     console.log("else");
-                    this.setState({movie: movie});   
+                    // this.setState({movie: movie});   
+                    this.setState({movies: movies});   
                 }
             }
         });
     }
 
     display() {
-        let movie = this.state.movie;
-        console.log("movie: ", movie);
-        // let keys =Object.keys(movie);
-        // console.log(Object.keys(movie));
-        // console.log("keys: ", keys);
-        
-        // ;
+        // let movie = this.state.movie;
+        let movies = this.state.movies;
+        console.log("movies: ", movies);
+   
+        // let keyLength= Object.keys(movie);
 
-        
-        // console.log("movie.id: ", movie.id, typeof(movie.id));
-        // console.log("movie: ", movie, typeof(movie));
-        // console.log("keys: ", Object.keys(movie));
-        let keyLength= Object.keys(movie);
-        if(keyLength.length !== 0 ) {    
+        // if(movies.length !== 0 ) {    
             return(
+                // <React.Fragment>
+                //     <div className="container">
+                //     <h5 style={{display: 'inline'}}>{movie.title} </h5>
+                //     <h5 style={{display: 'inline'}}> ({movie.year})   </h5>
+                //     <p style={{ marginBottom: '2px'}}>{movie.plot}</p>
+                //     {/* conditional rendering for remove nomination button */}
+                //     {movie['isNominee']
+                //         ? <p></p>
+                //         : <button onClick={() => { 
+                //            if(this.state.nominations.length === 5) {
+                //                 alert("No more nominations can be made");
+                //            } this.nominate()} 
+                //         } style={{ margin: '8px'}}>Nominate</button> 
+                //     }
+                //     </div>
+                // </React.Fragment>
                 <React.Fragment>
                     <div className="container">
-                    <h5 style={{display: 'inline'}}>{movie.title} </h5>
-                    <h5 style={{display: 'inline'}}> ({movie.year})   </h5>
-                    <p style={{ marginBottom: '2px'}}>{movie.plot}</p>
+                    {Object.keys(movies).map((i, key) => (
+                        <ul> 
+                            <li key={ movies[i].imdbID}> 
+                            <h5 style={{display: 'inline'}}> {movies[i].Title} </h5>
+                            <h5 style={{display: 'inline'}}> ({movies[i].Year})   </h5>
+                            {movies[i].isNominee !== false
+                                ? <p></p>
+                                : <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
+                            }
+                            {/* <p style={{ marginBottom: '2px'}}> {movies[i].imdbID}  </p> */}
+                            </li>
+                        </ul>
+                    ))}
                     {/* conditional rendering for remove nomination button */}
-                    {movie['isNominee']
+                    {/* {movie['isNominee']
+                        ? <p></p>
+                        : <button onClick={() => { 
+                           if(this.state.nominations.length === 5) {
+                                alert("No more nominations can be made");
+                           } this.nominate()} 
+                        } style={{ margin: '8px'}}>Nominate</button> 
+                    } */}
+                      {movies.isNominee !== false
                         ? <p></p>
                         : <button onClick={() => { 
                            if(this.state.nominations.length === 5) {
@@ -96,61 +138,66 @@ class Search extends Component {
                     </div>
                 </React.Fragment>
             );
-        }
+        // }
 
     }
 
-    nominate() {
-        let movie = this.state.movie;
+    nominate(i) {
+        console.log("i: ", i);
+        // let movie = this.state.movie;
+        let movies = this.state.movies;
+        // let movies = this.state.movies.Search;
         // object of movie
-        console.log("movie: ", movie);
+        console.log("movies: ", movies);
         // this.setState({isNominated: {movie: true}});
 
         this.setState(prevState => {
             // creating copy of state variable movie
-            let movie = Object.assign({}, prevState.movie); 
+            let movies = Object.assign({}, prevState.movies); 
             // update the name property, assign a new value  
-            movie.isNominee = true;    
-            // console.log("122 movie: ", movie);
-            // return new object movie object to be set to state                         
-            return { movie };                              
+            movies[i].isNominee = true;    
+            // console.log("122 movies: ", movies);
+            // return new object movies object to be set to state                         
+            return { movies };                              
         }, () =>{
             console.log("nominee is updated");
-            this.updateList();
+            this.updateList(i);
         });
     }
 
-    updateList() {
-        let movie = this.state.movie;
-        console.log("movie: ", movie);
-        this.setState({ nominations: this.state.nominations.concat([movie])});
+    updateList(i) {
+        // let movies = this.state.movies.Search;
+        let movies = this.state.movies;
+        // console.log("movie: ", movie);
+        this.setState({ nominations: this.state.nominations.concat([movies[i]])});
     }
 
-    removeNomination() {
+    removeNomination(i) {
         console.log("Is run");
-        let movie = this.state.movie;
+        let movies = this.state.movies;
+        let nomiees= this.state.nominations.length;
         // let index = this.state.nominations.findIndex(x => x['id'] === movie['id']);
-        let i=0;
-        for( i; i<this.state.nominations.length; i++) {
-            console.log("Is iterated");
-            if(this.state.nominations[i]['id'] === movie['id']){
+        let num=0;
+        // movies[i].imdbID
+        console.log("nominations: ", this.state.nominations);
+        for( num; num<nomiees; num++) {
+            // console.log("Is iterated");
+            if(this.state.nominations[num]['imdbID'] === movies[i]['imdbID']) {
+                console.log("i: ", i);
                 // return i;
+                
             }
+            
         }
         console.log("Is iterated");
-        let index = (i-1);
-        // console.log("index: ", i);
-        // let index = this.state.nominations.findIndex(x => x.title === title);
-        // console.log("index value: ", this.state.nominations[index]);
-        // this.setState({ 
-        //     arrayvar: this.state.arrayvar.concat([newelement])
-        //   })
+        let index = (i);
+
         let newList= this.state.nominations;
         console.log("newList: ", newList);
         let editedList= newList.splice(index, 1);
-        console.log("newList: ", newList);
-        console.log("editedList: ", editedList);
-        this.setState({nominations: editedList});
+        // console.log("newList: ", newList);
+        // console.log("editedList: ", editedList);
+        this.setState({nominations: newList});
         // console.log("edited list: ", editedList);
         
         // const newList = this.state.nominations.splice(index, 1);
@@ -177,26 +224,28 @@ class Search extends Component {
         for(let i=0; i<len;i++) {
             List.push(array[i]);
         }
-        console.log("List: ", List, typeof(List));
+        // console.log("List: ", List, typeof(List));
         return(
             <React.Fragment>
                  {this.state.nominations.length === 5
                         ? 
                         // <div class="jumbotron jumbotron-fluid">
-                            <div class="container" style={{backgroundColor: "#E9ECEF"}}> 
-                                <h5 class="display-5">You have nominated 5 movies</h5>
+                            <div className="container" style={{backgroundColor: "#E9ECEF"}}> 
+                                <h5 className="display-5">You have nominated 5 movies</h5>
                             </div>
                         // </div>
                         : <p></p>
                         }
 
-                {Object.keys(array).map((i, key) => (
+                 {Object.keys(array).map((i, key) => (
                     <ul> 
                             {/* style="list-style: none;" */}
                             {/* Object.keys(array)[i].toString() */}
-                            <li key={key}>  {array[i].title} "({array[i].year})" </li>
+                            {/* {console.log("array: ",array)}
+                            {console.log("array: ",array[i].imdbID)} */}
+                            <li key={array[i].imdbID}>  {array[i].Title} "({array[i].Year})" </li>
                                 {/* <td>    </td> */}
-                               <button onClick={() => {this.removeNomination()}} style={{display: 'inline', marginBottom: '8px'}}> Remove Nomination</button>
+                               <button onClick={() => {this.removeNomination(i)}} style={{display: 'inline', marginBottom: '8px'}}> Remove </button>
                         {/* {object[i].title} "{object[i].year}" <button>Remove</button> */}
                     </ul>
                 ))}
@@ -225,10 +274,10 @@ class Search extends Component {
                     </div>
                     <div className="row" >
                         <div className="col" id="grid">
-                        {Object.keys(this.state.movie).length ===0
+                        {/* {Object.keys(this.state.movies).length ===0
                         ? <h2 id="title">Results</h2>
                         : <h2 id="title">Results for "{this.state.movie.title}"</h2>
-                        }
+                        } */}
                             {this.display()}
                         </div>
                         <div className="col" id="grid">
