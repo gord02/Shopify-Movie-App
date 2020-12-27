@@ -9,6 +9,7 @@ class Search extends Component {
         super(props);
         this.searchMovie = this.searchMovie.bind(this);
         this.display = this.display.bind(this);
+        this.condtition = this.condtition.bind(this);
         this.nominate = this.nominate.bind(this);
         this.nominationList = this.nominationList.bind(this);
         this.removeNomination = this.removeNomination.bind(this);
@@ -78,11 +79,33 @@ class Search extends Component {
         });
     }
 
+    condtition(i) {
+        alert('You are limited to 5 nominations');
+        // let movies= this.state.movies;
+        // console.log("condtion");
+        // if( this.state.nominations.length === 5) {
+        // //    return <button type="button" className="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations" style={{ margin: '8px'}}>Nominate</button> 
+        //     // return (alert("No more nominations can be made"));
+        
+        // movies.forEach(flim => {
+        //     if(movies[i].isNominee === false){
+        //         console.log("met");
+        //         return (<button onClick={() =>  {this.nominate(i); }} style={{ margin: '8px'}}>Nominate</button> );
+        //     }
+        // });
+        // for(let num=0; num<movies.length;num++){
+        //     if(movies[num].isNominee === false){
+        //         console.log("met");
+        //         return <button onClick={() =>  {this.nominate(i); }} style={{ margin: '8px'}}>Nominate</button>
+        //     }
+        // }
+       
+    }
+
     display() {
         // let movie = this.state.movie;
         let movies = this.state.movies;
         console.log("movies: ", movies);
-   
         // let keyLength= Object.keys(movie);
 
         // if(movies.length !== 0 ) {    
@@ -112,8 +135,48 @@ class Search extends Component {
                             <h5 style={{display: 'inline'}}> ({movies[i].Year})   </h5>
                             {movies[i].isNominee !== false
                                 ? <p></p>
-                                : <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
+                                : <button onClick={() => {if(this.state.nominations.length === 5){this.condtition()}else{{this.nominate(i)}}  }} style={{ margin: '8px'}}>Nominate</button> 
                             }
+                            {/*  */}
+
+{/* {if(this.state.nominations.length !== 5){this.condtition}else{{this.nominate(i)}}  */}
+                            {/* {movies[i].isNominee !== false || this.state.nominations.length !== 5
+                                ? <p></p>
+                                :  <button onClick={() =>  {this.nominate(i); }} style={{ margin: '8px'}}>Nominate</button> 
+                            } */}
+
+                             {/* {this.state.nominations.length !== 5
+                                ? <p></p>
+                                :  <button onClick={() =>  {this.nominate(i); }} style={{ margin: '8px'}}>Nominate</button> 
+                            }  */}
+                            
+                                {/* // <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
+                                // type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations" */}
+                            {/* <button  {this.state.nominations.length !== 5 ? this.nominate(i) : data-toggle="popover" title= "Popover title" data-content="You are limited to 5 nominations" }></button>
+                            {movies[i].isNominee !== false
+                                ? <p></p>
+                                : <button onClick={() =>  
+                                    {if(this.state.nominations.length !== 5) {
+                                        this.nominate(i);
+                                    }else{
+                                       { console.log("ELSE")}
+                                    //  {data-toggle="popover" title= "Popover title" data-content="You are limited to 5 nominations" }
+                                    }
+                                }
+                                         } style={{ margin: '8px'}}>Nominate</button> 
+                                // <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
+                                // type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations"
+                            } */}
+
+
+{/* {this.state.nominations.length !== 5 'default' && 'active'}
+ */}
+
+
+                            {/* {this.state.nominations.length === 5
+                                ? <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations" onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
+                                : <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
+                            } */}
                             {/* <p style={{ marginBottom: '2px'}}> {movies[i].imdbID}  </p> */}
                             </li>
                         </ul>
@@ -127,6 +190,7 @@ class Search extends Component {
                            } this.nominate()} 
                         } style={{ margin: '8px'}}>Nominate</button> 
                     } */}
+                    {/* <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations">Click to toggle popover</button> */}
                       {movies.isNominee !== false
                         ? <p></p>
                         : <button onClick={() => { 
