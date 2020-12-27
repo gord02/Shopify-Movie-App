@@ -327,7 +327,7 @@ class Search extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col"  id="grid">
-                            <form onSubmit={(event) => { this.searchMovie(event) }}>
+                            <form onSubmit={(event) => { this.searchMovie(event)}}>
                                 <div className="form-group">
                                     <label htmlFor="exampleInputEmail1" id="title" style={{marginBottom:"1px"}}>Movie Title</label>
                                     <input style={{ margin:'0px'}} type="name" className="form-control" id="title" aria-describedby="MovieTitle" placeholder= "Enter movie title" ref={(input) => { this.movieTitleInput = input }} required></input>
@@ -338,10 +338,12 @@ class Search extends Component {
                     </div>
                     <div className="row" >
                         <div className="col" id="grid">
-                        {/* {Object.keys(this.state.movies).length ===0
-                        ? <h2 id="title">Results</h2>
-                        : <h2 id="title">Results for "{this.state.movie.title}"</h2>
-                        } */}
+                        {Object.keys(this.state.movies).length ===0
+                        ? <h2 >Results</h2>
+                        // : <h2 >Results for "{this.state.movies[i].Title}"</h2> 
+                        // : <h2></h2> 
+                        : <h2 >Results for "{this.state.InputData}"</h2> 
+                        }
                             {this.display()}
                         </div>
                         <div className="col" id="grid">
