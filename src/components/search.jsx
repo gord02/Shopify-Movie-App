@@ -1,8 +1,14 @@
 import React, { Component, Link } from 'react';
 import axios from 'axios';
 import '../search.css';
+import useSessionStorage from 'react-use-sessionstorage';
 
-
+// 1. docstring for all non required / non react included method: https://stackoverflow.com/questions/34205666/utilizing-docstrings
+// 2. delete the console logs
+// 3. const -> let -> never var
+// 4. delete unncessary stuff
+// 5. go over the names, think (WWANTV) what would akil name this variable / would he think this is a good enough name
+// 6. markdown file
 
 class Search extends Component {
     constructor(props) {
@@ -13,7 +19,6 @@ class Search extends Component {
         this.nominate = this.nominate.bind(this);
         this.nominationList = this.nominationList.bind(this);
         this.removeNomination = this.removeNomination.bind(this);
-        // this.Print = this.Print.bind(this);
         this.state = {
             inputData:'',
             movies: {},
@@ -21,9 +26,18 @@ class Search extends Component {
             isNominated: {},
             isNominee: true,
             isSearched: false,
-
         };
     };
+
+    componentDidMount() {
+        console.log("mounted");
+        // sessionStorage.setItem('user', JSON.stringify(user));
+        // var obj = JSON.parse(sessionStorage.getItem('user'));
+        // const [item, setItem] = useSessionStorage('name', 'Initial Value');
+        let nominations = JSON.parse(sessionStorage.getItem("nominations"));
+        console.log("nominations: ", nominations);
+        this.setState({nominations: nominations});
+    }
 
     searchMovie(event) {
         event.preventDefault();
@@ -41,7 +55,7 @@ class Search extends Component {
         .then((response) => {
             // console.log(response.data);
             const movieData=  response.data;
-            console.log("Movie Data: ",movieData);
+            // console.log("Movie Data: ",movieData);
             const movies= response.data.Search;
             // for(let i=0; i<movies.length; i++) {
 
@@ -55,7 +69,7 @@ class Search extends Component {
                 movies[i].isNominee = false;
                 // var person = {fname:"John", lname:"Doe", age:25};
             }
-            console.log(movies);
+            // console.log(movies); 
             if(this.state.nominations.length === 0) {
                 // this.setState({movie: movie});
                 this.setState({movies: movies});
@@ -105,10 +119,10 @@ class Search extends Component {
     display() {
         // let movie = this.state.movie;
         let movies = this.state.movies;
-        console.log("movies: ", movies);
-        // let keyLength= Object.keys(movie);
-
-        // if(movies.length !== 0 ) {    
+        // console.log("movies: ", movies);  
+        let keys= Object.keys(movies);
+        // console.log("the keys: ", keys);
+        // console.log("keys: ", Object.keys(movies));
             return(
                 // <React.Fragment>
                 //     <div className="container">
@@ -128,69 +142,19 @@ class Search extends Component {
                 // </React.Fragment>
                 <React.Fragment>
                     <div className="container">
-                    {Object.keys(movies).map((i, key) => (
+                    {Object.keys(movies).map((i, index) => (
                         <ul> 
-                            <li key={ movies[i].imdbID}> 
+                            {/* movies[i].imdbID */}
+                            <li key={movies[i].imdbID} id={movies[i].imdbID}> 
                             <h5 style={{display: 'inline'}}> {movies[i].Title} </h5>
                             <h5 style={{display: 'inline'}}> ({movies[i].Year})   </h5>
                             {movies[i].isNominee !== false
                                 ? <p></p>
-                                : <button onClick={() => {if(this.state.nominations.length === 5){this.condtition()}else{{this.nominate(i)}}  }} style={{ margin: '8px'}}>Nominate</button> 
+                                : <button onClick={() => {if(this.state.nominations.length === 5){this.condtition()}else{{this.nominate(i)}}  }} style={{ margin: '8px'}} data-mdb-toggle="animation" data-mdb-animation-reset="true" data-mdb-animation="slide-out-right">Nominate</button> 
                             }
-                            {/*  */}
-
-{/* {if(this.state.nominations.length !== 5){this.condtition}else{{this.nominate(i)}}  */}
-                            {/* {movies[i].isNominee !== false || this.state.nominations.length !== 5
-                                ? <p></p>
-                                :  <button onClick={() =>  {this.nominate(i); }} style={{ margin: '8px'}}>Nominate</button> 
-                            } */}
-
-                             {/* {this.state.nominations.length !== 5
-                                ? <p></p>
-                                :  <button onClick={() =>  {this.nominate(i); }} style={{ margin: '8px'}}>Nominate</button> 
-                            }  */}
-                            
-                                {/* // <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
-                                // type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations" */}
-                            {/* <button  {this.state.nominations.length !== 5 ? this.nominate(i) : data-toggle="popover" title= "Popover title" data-content="You are limited to 5 nominations" }></button>
-                            {movies[i].isNominee !== false
-                                ? <p></p>
-                                : <button onClick={() =>  
-                                    {if(this.state.nominations.length !== 5) {
-                                        this.nominate(i);
-                                    }else{
-                                       { console.log("ELSE")}
-                                    //  {data-toggle="popover" title= "Popover title" data-content="You are limited to 5 nominations" }
-                                    }
-                                }
-                                         } style={{ margin: '8px'}}>Nominate</button> 
-                                // <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
-                                // type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations"
-                            } */}
-
-
-{/* {this.state.nominations.length !== 5 'default' && 'active'}
- */}
-
-
-                            {/* {this.state.nominations.length === 5
-                                ? <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations" onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
-                                : <button onClick={() =>  {this.nominate(i)} } style={{ margin: '8px'}}>Nominate</button> 
-                            } */}
-                            {/* <p style={{ marginBottom: '2px'}}> {movies[i].imdbID}  </p> */}
                             </li>
                         </ul>
                     ))}
-                    {/* conditional rendering for remove nomination button */}
-                    {/* {movie['isNominee']
-                        ? <p></p>
-                        : <button onClick={() => { 
-                           if(this.state.nominations.length === 5) {
-                                alert("No more nominations can be made");
-                           } this.nominate()} 
-                        } style={{ margin: '8px'}}>Nominate</button> 
-                    } */}
-                    {/* <button type="button" class="btn btn-lg btn-danger" data-toggle="popover" title="Popover title" data-content="You are limited to 5 nominations">Click to toggle popover</button> */}
                       {movies.isNominee !== false
                         ? <p></p>
                         : <button onClick={() => { 
@@ -207,12 +171,12 @@ class Search extends Component {
     }
 
     nominate(i) {
-        console.log("i: ", i);
+        // console.log("i: ", i);
         // let movie = this.state.movie;
         let movies = this.state.movies;
         // let movies = this.state.movies.Search;
         // object of movie
-        console.log("movies: ", movies);
+        // console.log("movies: ", movies);
         // this.setState({isNominated: {movie: true}});
 
         this.setState(prevState => {
@@ -248,10 +212,7 @@ class Search extends Component {
             // console.log("Is iterated");
             if(this.state.nominations[num]['imdbID'] === movies[i]['imdbID']) {
                 console.log("i: ", i);
-                // return i;
-                
-            }
-            
+            } 
         }
         console.log("Is iterated");
         let index = (i);
@@ -282,7 +243,7 @@ class Search extends Component {
         let thisKeyword= this;
         let array= this.state.nominations;
         // console.log("nomination: ", this.state.nominations, "typeOf: ", typeof(this.state.nominations));
-        let List= [];
+        let List= []; // WRONG CHANGE THIS
         let len= array.length;
         // console.log("len: ", len);
         for(let i=0; i<len;i++) {
@@ -307,9 +268,9 @@ class Search extends Component {
                             {/* Object.keys(array)[i].toString() */}
                             {/* {console.log("array: ",array)}
                             {console.log("array: ",array[i].imdbID)} */}
-                            <li key={array[i].imdbID}>  {array[i].Title} "({array[i].Year})" </li>
+                            <li data-mdb-animation="slide-right"  key={array[i].imdbID}  id={array[i].imdbID}>  {array[i].Title} "({array[i].Year})" </li>
                                 {/* <td>    </td> */}
-                               <button onClick={() => {this.removeNomination(i)}} style={{display: 'inline', marginBottom: '8px'}}> Remove </button>
+                               <button onClick={() => {this.removeNomination(i)}} style={{display: 'inline', marginBottom: '8px'}} data-mdb-toggle="animation" data-mdb-animation-reset="true" data-mdb-animation="slide-out-right" > Remove </button>
                         {/* {object[i].title} "{object[i].year}" <button>Remove</button> */}
                     </ul>
                 ))}
@@ -318,6 +279,12 @@ class Search extends Component {
         );
     }
 
+    componentDidUpdate(){
+        // event.preventDefault();
+        // console.log("unmounted");
+        sessionStorage.setItem("nominations", JSON.stringify(this.state.nominations));
+        let nominations = JSON.parse(sessionStorage.getItem("nominations"));
+    }
     render() {
         return (
             <React.Fragment>
@@ -329,16 +296,24 @@ class Search extends Component {
                         <div className="col"  id="grid">
                             <form onSubmit={(event) => { this.searchMovie(event)}}>
                                 <div className="form-group">
-                                    <label htmlFor="exampleInputEmail1" id="title" style={{marginBottom:"1px"}}>Movie Title</label>
-                                    <input style={{ margin:'0px'}} type="name" className="form-control" id="title" aria-describedby="MovieTitle" placeholder= "Enter movie title" ref={(input) => { this.movieTitleInput = input }} required></input>
+                                    <label htmlFor="exampleInputEmail1" id="title" style={{marginBottom:"1px",display:"block"}}>Movie Title</label>
+            {/* "Enter movie title" */}
+                                    <input style={{ margin:'0px', display:"inline", width: "96%;"}} type="name" className="form-control" id="title" aria-describedby="MovieTitle" placeholder= "Enter movie title"  ref={(input) => { this.movieTitleInput = input }} required></input>
                                     <button type="submit" className="btn btn-primary" style={{display:"inline"}} > <i style={{display:"inline"}} className="fas fa-search"></i></button>
                                 </div>
                             </form>
                         </div>
                     </div>
+                    <label htmlFor="exampleInputEmail1" id="title" style={{marginBottom:"1px"}}>Movie Title</label>
+                    <nav className="navbar navbar-light bg-light ">
+                        <form method='POST' action="/" className="form-inline">
+                            <input style={{width: "1150px;"}}  type="text" className="form-control" name="searchValue"id="searchValue" aria-describedby="search value" placeholder= "Enter title of image to search for" ref={(input) => { this.searchInput = input }} ></input>
+                            <button type="submit" className="btn btn-primary" style={{display:"inline"}} > <i style={{display:"inline"}} className="fas fa-search"></i></button>
+                        </form>
+                    </nav>
                     <div className="row" >
                         <div className="col" id="grid">
-                        {Object.keys(this.state.movies).length ===0
+                        {Object.keys(this.state.movies).length === 0
                         ? <h2 >Results</h2>
                         // : <h2 >Results for "{this.state.movies[i].Title}"</h2> 
                         // : <h2></h2> 
