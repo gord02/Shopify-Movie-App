@@ -53,8 +53,6 @@ class Search extends Component {
         axios.get(url) 
         .then((response) => {
             // console.log(response.data);
-            const movieData=  response.data;
-            // console.log("Movie Data: ",movieData);
             const movies= response.data.Search;
 
             for(let i=0; i<movies.length;i++) {
@@ -95,14 +93,20 @@ class Search extends Component {
                 <React.Fragment>
                     <div className="container">
                         {Object.keys(movies).map((i, index) => (
-                            <ul> 
+                            <ul key={movies[i].imdbID}> 
                                 {/* movies[i].imdbID */}
                                 <li key={movies[i].imdbID} id={movies[i].imdbID}> 
                                     <h5 style={{display: 'inline'}}> {movies[i].Title} </h5>
                                     <h5 style={{display: 'inline'}}> ({movies[i].Year})   </h5>
                                     {movies[i].isNominee !== false
                                         ?   <p></p>
-                                        :   <button onClick={() => {if(this.state.nominations.length === 5){this.condition()}else{{this.nominate(i)}}  }} style={{ margin: '8px'}} >Nominate</button> 
+                                        :   <button onClick={() => {
+                                                if(this.state.nominations.length === 5) {
+                                                    this.condition();
+                                                }else{
+                                                    this.nominate(i);
+                                                }  
+                                            }} style={{ margin: '8px'}} >Nominate</button> 
                                     }
                                 </li>
                             </ul>
@@ -117,14 +121,6 @@ class Search extends Component {
     }
 
     nominate(i) {
-        // console.log("i: ", i);
-        // let movie = this.state.movie;
-        let movies = this.state.movies;
-        // let movies = this.state.movies.Search;
-        // object of movie
-        // console.log("movies: ", movies);
-        // this.setState({isNominated: {movie: true}});
-
         this.setState(prevState => {
             // creating copy of state variable movie
             let movies = Object.assign({}, prevState.movies); 
@@ -189,10 +185,10 @@ class Search extends Component {
                     :   <p></p>
                 }
                 {Object.keys(array).map((i, key) => (
-                    <ul> 
+                    <ul key={array[i].imdbID}> 
                         {/* The index value of nominated movie is passed to remove nomination function */}
-                        <li data-mdb-animation="slide-right"  key={array[i].imdbID}  id={array[i].imdbID}>  {array[i].Title} "({array[i].Year})" </li>
-                        <button onClick={() => {this.removeNomination(i)}} style={{display: 'inline', marginBottom: '8px',fadeOut}}> Remove </button>
+                        <li key={array[i].imdbID}  id={array[i].imdbID}>  {array[i].Title} ({array[i].Year}) </li>
+                        <button onClick={() => {this.removeNomination(i)}} style={{display: 'inline', marginBottom: '8px'}}> Remove </button>
                     </ul>
                 ))}
             </React.Fragment>
@@ -225,8 +221,8 @@ class Search extends Component {
                         <div className="col" id="grid">
                         {/* conditional rendering */}
                         {Object.keys(this.state.movies).length === 0
-                            ? <h2 >Results</h2>
-                            : <h2 >Results for "{this.state.InputData}"</h2> 
+                            ? <h2 style={{margin:"4px"}}>Results</h2>
+                            : <h2 style={{margin:"4px"}}>Results for "{this.state.InputData}"</h2> 
                         }
                         {this.display()}
                         </div>
