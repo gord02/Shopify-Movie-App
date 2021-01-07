@@ -16,6 +16,7 @@ class Search extends Component {
         this.display = this.display.bind(this);
         this.condition = this.condition.bind(this);
         this.nominate = this.nominate.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.nominationList = this.nominationList.bind(this);
         this.removeNomination = this.removeNomination.bind(this);
         this.state = {
@@ -24,6 +25,7 @@ class Search extends Component {
             nominations:[],
             isNominee: true,
             isSearched: false,
+            animationCondition: ''
         };
     };
 
@@ -31,7 +33,7 @@ class Search extends Component {
         console.log("mounted");
         // Allows me to retrieve the nominated movies that were stored in sessionStorage
         let nominations = JSON.parse(sessionStorage.getItem("nominations"));
-        console.log("nominations: ", nominations);
+        // console.log("nominations: ", nominations);
         // Makes sure a null value isn't pushed to state
         if(nominations !== null){
             this.setState({nominations: nominations});
@@ -64,27 +66,51 @@ class Search extends Component {
             }
             for(let i=0; i< this.state.nominations.length; i++) {
                 // console.log(this.state.nominations);
-                if( this.state.nominations[i].id === movies[i].imdbID) {
+                if( this.state.nominations[i]['imdbID'] === movies[i]['imdbID']) {
                     console.log("here");
                     this.setState({isSearched: true});
-                    this.setState({movie: this.state.nominations[i]}, function() {
-                        console.log ("current movie: ", this.state.movie);
-                        this.setState({isSearched: true});
-                    });
-                }else{
-                    console.log("else");
-                    this.setState({movies: movies});   
+                    // this.setState({movies: movies});  
+                    // movies.pop(i, None);
+                    delete movies[i];
+                    console.log("AFTER deletion:", movies,"i", i)
+                    // this.setState(prevState => {
+                    //     // creating copy of state variable movie
+                    //     let movies = Object.assign({}, prevState.movies); 
+                    //     // update the name property, assign a new value  
+                    //     movies[i] = this.state.nominations[i];    
+                    //     // return new object movies object to be set to state                         
+                    //     return { movies };     
+                    //     // console.log()                         
+                    // }); 
+                    // this.handleChange(i);
+                    // this.setState({movie: this.state.nominations[i]}, function() {
+                    //     console.log ("current movie: ", this.state.movie);
+                    //     this.setState({isSearched: true});
+                    // });
                 }
             }
+            console.log(movies);
+            // console.log(this.state.movies);
+            this.setState({movies: movies});   
         });
     }
-
+    handleChange(i){
+        this.setState(prevState => {
+            // creating copy of state variable movie
+            let movies = Object.assign({}, prevState.movies); 
+            // update the name property, assign a new value  
+            movies[i]['isNominee'] = true;    
+            // return new object movies object to be set to state                         
+            return { movies };                              
+        });
+    }
     condition() {
         alert('You are limited to 5 nominations');
     }
 
     display() {
         console.log("nominations: ", this.state.nominations);
+        console.log("movies: ", this.state.movies);
         // let movie = this.state.movie;
         let movies = this.state.movies;
         // console.log("movies: ", movies);  
@@ -111,10 +137,6 @@ class Search extends Component {
                                 </li>
                             </ul>
                         ))}
-                        {movies.isNominee !== false
-                            ?   <p></p>
-                            :   <button onClick={() => { this.nominate()} } style={{ margin: '8px'}}>Nominate</button> 
-                        }
                     </div>
                 </React.Fragment>
             );
@@ -143,6 +165,12 @@ class Search extends Component {
     }
 
     removeNomination(i) {
+        this.setState({animationCondition: "fade out"});
+        // Animated.timing(opacity, {
+        //     toValue:0,
+        //     duration:1000,
+        //     useNativeDriver: true
+        // }).start()
         console.log("Is run");
         console.log("movie: ", i);
         let index = i;
@@ -159,6 +187,7 @@ class Search extends Component {
             // return new object movie object to be set to state                         
             return { movie };                              
         });
+        return true;
     }
     
     nominationList() {
@@ -188,7 +217,7 @@ class Search extends Component {
                     <ul key={array[i].imdbID}> 
                         {/* The index value of nominated movie is passed to remove nomination function */}
                         <li key={array[i].imdbID}  id={array[i].imdbID}>  {array[i].Title} ({array[i].Year}) </li>
-                        <button onClick={() => {this.removeNomination(i)}} style={{display: 'inline', marginBottom: '8px'}}> Remove </button>
+                        <button className= " " onClick={() => {this.removeNomination(i);}} style={{display: 'inline', marginBottom: '8px'}}> Remove </button>
                     </ul>
                 ))}
             </React.Fragment>

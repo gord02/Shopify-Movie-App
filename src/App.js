@@ -1,4 +1,3 @@
-import './App.css';
 import React, { Component } from 'react'
 import Search from "./components/search";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
