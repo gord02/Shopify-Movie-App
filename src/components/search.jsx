@@ -45,7 +45,7 @@ class Search extends Component {
         const urlInsertion = "s=" + title + apiKey;
         const url = 'http://www.omdbapi.com/?' + urlInsertion;
         
-        // Creates a post request to the OMDB api requesting movies based on search value from the form in frontend
+        // Creates a get request to the OMDB api requesting movies based on search value from the form in frontend
         axios.get(url) 
         .then((response) => {
             const movies = response.data.Search;
@@ -127,7 +127,7 @@ class Search extends Component {
      */
     updateList(index) {
         const movies = this.state.movies;
-        this.setState({ nominations: this.state.nominations.concat([movies[i]])});
+        this.setState({ nominations: this.state.nominations.concat([movies[index]])});
     }
 
     /**
@@ -135,7 +135,6 @@ class Search extends Component {
         * @param {int} index the index value of the movie to be removed from nominations list 
     */
     removeNomination(index) {
-        const index = index;
         const updatedNominationsList= this.state.nominations;
 
         // splice used to remove the one value in array starting from index value index
