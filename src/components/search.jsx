@@ -2,13 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import '../search.css';
 
-// 1. docstring for all non required / non react included method: https://stackoverflow.com/questions/34205666/utilizing-docstrings
-// 2. delete the console logs
-// 3. const -> let -> never var
-// 4. delete unncessary stuff
-// 5. go over the names, think (WWANTV) what would akil name this variable / would he think this is a good enough name
-// 6. markdown file
-
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -28,10 +21,10 @@ class Search extends Component {
         };
     };
 
+    /**
+        * This function is used to retrieve nomination data that potentially existed if the user may have made their selection then reloaded the page.
+    */
     componentDidMount() {
-        /**
-            * This function is used to retrieve nomination data that potentially existed if the user may have made their selection then reloaded the page.
-        */
         // Allows me to retrieve the nominated movies that were stored in sessionStorage
         const nominations = JSON.parse(sessionStorage.getItem("nominations"));
         // Makes sure a null value isn't pushed to state
@@ -40,10 +33,10 @@ class Search extends Component {
         }
     }
 
+    /**
+        * This function is used to get movies from the OMDB movie site based on the search value inputted by user, the result of this search is then saved to state
+    */
     searchMovie(event) {
-        /**
-            * This function is used to get movies from the OMDB movie site based on the search value inputted by user, the result of this search is then saved to state
-        */
         event.preventDefault();
         const rawTitle = this.movieTitleInput.value;
         this.setState({InputData: rawTitle});
@@ -75,35 +68,34 @@ class Search extends Component {
         });
     }
 
+    /**
+        * This function is used to notify the user that they are not allowed to make more than 5 nominations if the user tried to press nominate for a sixth movie
+    */
     condition() {
-        /**
-            * This function is used to notify the user that they are not allowed to make more than 5 nominations if the user tried to press nominate for a sixth movie
-        */
         alert('You are limited to 5 nominations');
     }
-
+    /**
+        * This function displays the results from the OMDB api. The name, title and year of release of each movie is displayed along with a button to nominate each one
+     */
     displaySearchResults() {
-        /**
-            * This function displays the results from the OMDB api. The name, title and year of release of each movie is displayed along with a button to nominate each one
-        */
         const movies = this.state.movies;
         return(
             <React.Fragment>
-                <div className="container">
+                <div className = "container">
                     {Object.keys(movies).map((i, index) => (
                         <ul key={movies[i].imdbID}> 
                             <li key={movies[i].imdbID} id={movies[i].imdbID}> 
-                                <h5 style={{display: 'inline'}}> {movies[i].Title} </h5>
-                                <h5 style={{display: 'inline'}}> ({movies[i].Year}) </h5>
+                                <h5 id = "inline" > {movies[i].Title} </h5>
+                                <h5 id = "inline" > ({movies[i].Year}) </h5>
                                 {movies[i].isNominee !== false
                                     ?   <p></p>
                                     :   <button onClick={() => {
                                             if(this.state.nominations.length === 5) {
                                                 this.condition();
                                             }else{
-                                                this.nominate(i);
+                                                this.nominate(index);
                                             }  
-                                        }} style={{ margin: '8px'}} >Nominate</button> 
+                                        }} id = "margin8" >Nominate</button> 
                                 }
                             </li>
                         </ul>
@@ -113,10 +105,11 @@ class Search extends Component {
         );
     }
 
-    nominate(i) {
-        /**
-            * This function is used to facilitates the nomination of a individual movie. This nomination is achieved by changing the property on the movie object and setting the 'isNominee' value to be true therefore distinguishing this movie as a nomination
-        */
+    /**
+        * This function is used to facilitates the nomination of a individual movie. This nomination is achieved by changing the property on the movie object and setting the 'isNominee' value to be true therefore distinguishing this movie as a nomination
+        * @param {int} index the index value of the movie to be nominated inside of the movies list
+    */
+    nominate(index) {
         this.setState(prevState => {
             // creating copy of state variable movie
             let movies = Object.assign({}, prevState.movies); 
@@ -125,23 +118,24 @@ class Search extends Component {
             // return new object movies object to be set to state                         
             return { movies };                              
         }, () => {
-            this.updateList(i);
+            this.updateList(index);
         });
     }
-
-    updateList(i) {
-        /**
-            * This function is used add the selected movie to nominate to a list of nominated movies
-        */
+    /**
+        * This function is used add the selected movie to nominate to a list of nominated movies
+        * @param {int} index the index value of the movie inside of the movie list to be added to nominations list 
+     */
+    updateList(index) {
         const movies = this.state.movies;
         this.setState({ nominations: this.state.nominations.concat([movies[i]])});
     }
 
-    removeNomination(i) {
-        /**
-            * This function is used to remove a nominated movie from the list of nominated movies, as well as revert the property of 'isNominee' to false
-        */
-        const index = i;
+    /**
+        * This function is used to remove a nominated movie from the list of nominated movies, as well as revert the property of 'isNominee' to false
+        * @param {int} index the index value of the movie to be removed from nominations list 
+    */
+    removeNomination(index) {
+        const index = index;
         const updatedNominationsList= this.state.nominations;
 
         // splice used to remove the one value in array starting from index value index
@@ -158,77 +152,75 @@ class Search extends Component {
             // return new object movie object to be set to state                         
             return { movie };                              
         });
-        return true;
     }
     
+    /**
+        * This function is used display the list of nominated movies  
+    */
     displayNominationList() {
-        /**
-            * This function is used display the list of nominated movies  
-        */
-        const nominations= this.state.nominations;
-        const length= nominations.length;
+        const nominations = this.state.nominations;
+        const length = nominations.length;
 
         return(
             <React.Fragment>
-                {length=== 5
+                {length === 5
                     ? 
-                        <div className="container" style={{backgroundColor: "#E9ECEF"}}> 
-                            <h5 className="display-5">You have nominated 5 movies</h5>
+                        <div className = "container" id = "backgroundColor"> 
+                            <h5 className = "display-5">You have nominated 5 movies</h5>
                         </div>
                     :   <p></p>
                 }
-                {Object.keys(nominations).map((i, key) => (
-                    <ul key={nominations[i].imdbID}> 
+                {Object.keys(nominations).map((index, key) => (
+                    <ul key = {nominations[index].imdbID}> 
 
                         {/* The index value of nominated movie is passed to remove nomination function */}
-                        <li key={nominations[i].imdbID}  id={nominations[i].imdbID}>  {nominations[i].Title} ({nominations[i].Year}) </li>
-                        <button onClick={() => {this.removeNomination(i);}} style={{display: 'inline', marginBottom: '8px'}}> Remove </button>
+                        <li key = {nominations[index].imdbID}  id = {nominations[index].imdbID}>  {nominations[index].Title} ({nominations[index].Year}) </li>
+                        <button onClick = {() => {this.removeNomination(index);}} id = "marginBottom8 inline"> Remove </button>
                     </ul>
                 ))}
             </React.Fragment>
         );
     }
-
+    /**
+        * This function is used to update the sessionStorage so that each time the nomination list is updated, so is sessionStorage allowing the data to be saved even if page is reloaded
+    */
     componentDidUpdate() {
-        /**
-            * This function is used to update the sessionStorage so that each time the nomination list is updated, so is sessionStorage allowing the data to be saved even if page is reloaded
-        */
         // Allows me to set a value in sessionStorage so that upon refresh of page the nominated values will remain since they are stored in session storage and can be retrieved
         sessionStorage.setItem("nominations", JSON.stringify(this.state.nominations));
     }
 
-    render() {
-        /**
-            * This function renders component data
-        */
+    /**
+        * This function renders component data
+    */
+    render() {  
         return (
             <React.Fragment>
-                <div className='container'>
-                    <h1 id="container">The Shoppies</h1>
+                <div className = 'container'>
+                    <h1 id = "container">The Shoppies</h1>
                 </div>
-                <div className="container">
-                    <div className="row">
-                        <div className="col"  id="grid">
+                <div className = "container">
+                    <div className = "row">
+                        <div className = "col"  id = "grid">
                             <form onSubmit={(event) => { this.searchMovie(event)}}>
-                                <div className="form-group">
-                                    <label htmlFor="exampleInputEmail1" id="title" style={{marginBottom:"1px",display:"block"}}>Movie Title</label>
-                                    <input style={{ margin:'0px', display:"inline", width: "96%"}} type="name" className="form-control" id="title" aria-describedby="MovieTitle" placeholder= "Enter movie title"  ref={(input) => { this.movieTitleInput = input }} required></input>
-                                    <button type="submit" className="btn btn-primary" style={{display:"inline"}} > <i style={{display:"inline"}} className="fas fa-search"></i></button>
+                                <div className = "form-group">
+                                    <label htmlFor="exampleInputEmail1" id = "block marginBottom1 title" >Movie Title</label>
+                                    <input id = "inline width96p margin0 title" type="name" className = "form-control" aria-describedby="MovieTitle" placeholder= "Enter movie title"  ref={(input) => { this.movieTitleInput = input }} required></input>
+                                    <button type="submit" className = "btn btn-primary" id = "inline" > <i id = "inline" className = "fas fa-search"></i></button>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <div className="row" >
-                        <div className="col" id="grid">
+                    <div className = "row" >
+                        <div className = "col" id = "grid">
                         {Object.keys(this.state.movies).length === 0
-                            ? <h2 style={{margin:"4px"}}>Results</h2>
-                            : <h2 style={{margin:"4px"}}>Results for "{this.state.InputData}"</h2> 
+                            ? <h2 id = "margin4">Results</h2>
+                            : <h2 id = "margin4">Results for "{this.state.InputData}"</h2> 
                         }
                         {this.displaySearchResults()}
                         </div>
-                        <div className="col" id="grid">
-                            <h2 id="title" style={{marginBottom: "0px"}}>Nominations</h2>
-                            <small style={{marginTop: "0px"}}>Only 5 nominations can be made</small>
+                        <div className = "col" id = "grid">
+                            <h2 id = "title marginBottom0">Nominations</h2>
+                            <small id = "marginTop0">Only 5 nominations can be made</small>
                             {this.displayNominationList()}
                         </div>
                     </div>

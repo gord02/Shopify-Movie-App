@@ -13,54 +13,44 @@
     margin-top: 50px;
 }
 
-.fade-out {
-    animation: fadeOut ease 8s;
-    -webkit-animation: fadeOut ease 8s;
-    -moz-animation: fadeOut ease 8s;
-    -o-animation: fadeOut ease 8s;
-    -ms-animation: fadeOut ease 8s;
-  }
-  @keyframes fadeOut {
-    0% {
-      opacity:1;
-    }
-    100% {
-      opacity:0;
-    }
-  }
-  
-  @-moz-keyframes fadeOut {
-    0% {
-      opacity:1;
-    }
-    100% {
-      opacity:0;
-    }
-  }
-  
-  @-webkit-keyframes fadeOut {
-    0% {
-      opacity:1;
-    }
-    100% {
-      opacity:0;
-    }
-  }
-  
-  @-o-keyframes fadeOut {
-    0% {
-      opacity:1;
-    }
-    100% {
-      opacity:0;
-    }
-  }
-  
-  @-ms-keyframes fadeOut {
-    0% {
-      opacity:1;
-    }
-    100% {
-      opacity:0;
-  }
+#inline{
+    display: inline;
+}
+
+#margin8{
+    margin: '8px'
+}
+#marginBottom8{
+    margin-bottom: '8px'
+}
+
+#width96p{
+    width: "96%"
+}
+
+#margin0{
+    margin: "0px"
+}
+
+#marginBottom1{
+    margin-bottom: "1px";
+}
+#block{
+    display: block;
+}
+
+#marginTop0{
+    margin-top: 0px;
+}
+
+#marginBottom0{
+    margin-bottom: "0px";
+}
+
+#margin4{
+    margin: "4px";
+}
+
+#backgroundColor{
+    background-color: "#E9ECEF";
 }
