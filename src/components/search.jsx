@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../search.css';
+// import location;
 
 class Search extends Component {
     constructor(props) {
@@ -44,10 +45,14 @@ class Search extends Component {
         const apiKey = '&apikey=e36df1a5&';
         const urlInsertion = "s=" + title + apiKey;
         const url = 'http://www.omdbapi.com/?' + urlInsertion;
-        
+        // let currentUrl= window.location.href;
+        // console.log(currentUrl);
         // Creates a get request to the OMDB api requesting movies based on search value from the form in frontend
         axios.get(url) 
         .then((response) => {
+            // if (currentUrl !== 'https:') {
+            //     currentUrl.replace(`https:${currentUrl.href.substring(currentUrl.length)}`);
+            // }
             const movies = response.data.Search;
             // adds property for each movie so that each movie can have a property denoting whether it is nominated or not.
             for(let i=0; i< movies.length; i++) {
@@ -114,7 +119,7 @@ class Search extends Component {
             // creating copy of state variable movie
             let movies = Object.assign({}, prevState.movies); 
             // update the name property, assign a new value  
-            movies[i].isNominee = true;    
+            movies[index].isNominee = true;    
             // return new object movies object to be set to state                         
             return { movies };                              
         }, () => {

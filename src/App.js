@@ -10,7 +10,7 @@ class App extends Component {
         <Router>
             {/* Switch is used to prevent multiple components from running at once when using routing */}
             <Switch>
-                <Route  exact path="/" component={Search} />
+                <Route  path="/" component={Search} />
             </Switch>
         </Router>
       </React.Fragment>
