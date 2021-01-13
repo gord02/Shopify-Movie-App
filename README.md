@@ -2,6 +2,9 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Link to the hosted project
+[Shopify Movie App](https://gord02.github.io/Shopify-Movie-App/)
+
 ### `npm start`
 
 Runs the app in the development mode.\
