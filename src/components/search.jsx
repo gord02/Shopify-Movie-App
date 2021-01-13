@@ -209,7 +209,7 @@ class Search extends Component {
                                 <div className = "form-group">
                                     <label htmlFor="exampleInputEmail1" id = "block marginBottom1 title" >Movie Title</label>
                                     <input id = "inline width96p margin0 title" type="name" className = "form-control" aria-describedby="MovieTitle" placeholder= "Enter movie title"  ref={(input) => { this.movieTitleInput = input }} required></input>
-                                    <button type="submit" className = "btn btn-primary" id = "inline" > <i id = "inline" className = "fas fa-search"></i></button>
+                                    <button type="submit" className = "btn btn-primary" id = "submButton" > <i id = "inline submButton" className = "fas fa-search"></i></button>
                                 </div>
                             </form>
                         </div>

@@ -4,6 +4,15 @@
     border-radius: 2%;
     box-shadow: 2%;
 }
+#submButton{
+    background-color: transparent;
+    border: transparent;
+    margin-top: -63px;
+    color: gray;
+    margin-left: 1050px;
+    outline: none;
+    box-shadow: none;
+}
 
 #title{
     margin-top: 7px;
