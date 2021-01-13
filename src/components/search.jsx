@@ -44,7 +44,7 @@ class Search extends Component {
         const title = rawTitle.replace(' ', '+');
         const apiKey = '&apikey=e36df1a5&';
         const urlInsertion = "s=" + title + apiKey;
-        const url = 'http://www.omdbapi.com/?' + urlInsertion;
+        const url = 'https://www.omdbapi.com/?' + urlInsertion;
         // let currentUrl= window.location.href;
         // console.log(currentUrl);
         // Creates a get request to the OMDB api requesting movies based on search value from the form in frontend
