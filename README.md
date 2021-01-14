@@ -2,6 +2,12 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### Overview
+Frontend application created to facilitate the search and nomination of movies from the OMDb API.
+
+### Instructions 
+At the index route of this application there will be a search bar where the name of the movie you would like to search for, or nominate can be inputed. The input value must be a correctly spelled word and should be at least some part of the desired movie you wish to find. For instance, if I wanted to search for the movie “Toy Story”, inputting “toy”, “story” and “Toy Story” will all display some results of the “Toy Story” franchise, but the more specific the input value, the better the results. Once finished inputting a value, press “return” on the keyboard or search icon so that the list movies closest to your inputted value will be displayed below.
+
 Link to the hosted project
 [Shopify Movie App](https://gord02.github.io/Shopify-Movie-App/)
 
@@ -9,9 +15,6 @@ Link to the hosted project
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### Overview
-Frontend application created to facilitate the search and nomination of movies from the OMDb API.
 
 ### Technology
 - Axios, used for making get requests to OMDb API
