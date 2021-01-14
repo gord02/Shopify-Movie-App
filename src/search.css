@@ -27,18 +27,18 @@
 }
 
 #margin8{
-    margin: '8px'
+    margin: '8px';
 }
 #marginBottom8{
-    margin-bottom: '8px'
+    margin-bottom: '8px';
 }
 
 #width96p{
-    width: "96%"
+    width: "96%";
 }
 
 #margin0{
-    margin: "0px"
+    margin: "0px";
 }
 
 #marginBottom1{
@@ -62,4 +62,10 @@
 
 #backgroundColor{
     background-color: "#E9ECEF";
+}
+
+#lightButton{
+    background-color: #f2f2f2 !important; 
+    color: black !important; 
+    border-color: #ababab !important; 
 }

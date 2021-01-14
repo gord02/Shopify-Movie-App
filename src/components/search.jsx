@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import '../search.css';
-// import location;
 
 class Search extends Component {
     constructor(props) {
@@ -35,6 +34,14 @@ class Search extends Component {
     }
 
     /**
+        * This function is used to update the sessionStorage so that each time the nomination list is updated, so is sessionStorage allowing the data to be saved even if page is reloaded
+    */
+    componentDidUpdate() {
+        // Allows me to set a value in sessionStorage so that upon refresh of page the nominated values will remain since they are stored in session storage and can be retrieved
+        sessionStorage.setItem("nominations", JSON.stringify(this.state.nominations));
+    }
+
+    /**
         * This function is used to get movies from the OMDB movie site based on the search value inputted by user, the result of this search is then saved to state
     */
     searchMovie(event) {
@@ -45,14 +52,9 @@ class Search extends Component {
         const apiKey = '&apikey=e36df1a5&';
         const urlInsertion = "s=" + title + apiKey;
         const url = 'https://www.omdbapi.com/?' + urlInsertion;
-        // let currentUrl= window.location.href;
-        // console.log(currentUrl);
         // Creates a get request to the OMDB api requesting movies based on search value from the form in frontend
         axios.get(url) 
         .then((response) => {
-            // if (currentUrl !== 'https:') {
-            //     currentUrl.replace(`https:${currentUrl.href.substring(currentUrl.length)}`);
-            // }
             const movies = response.data.Search;
             // adds property for each movie so that each movie can have a property denoting whether it is nominated or not.
             for(let i=0; i< movies.length; i++) {
@@ -93,14 +95,14 @@ class Search extends Component {
                                 <h5 id = "inline" > {movies[i].Title} </h5>
                                 <h5 id = "inline" > ({movies[i].Year}) </h5>
                                 {movies[i].isNominee !== false
-                                    ?   <p></p>
-                                    :   <button onClick={() => {
+                                    ?   <button id = "margin8 lightButton" className= "btn btn-light" disabled>Nominate</button> 
+                                    :   <button id = "margin8 lightButton" className= "btn btn-light" onClick={() => {
                                             if(this.state.nominations.length === 5) {
                                                 this.condition();
                                             }else{
                                                 this.nominate(index);
                                             }  
-                                        }} id = "margin8" >Nominate</button> 
+                                        }} >Nominate</button> 
                                 }
                             </li>
                         </ul>
@@ -178,19 +180,12 @@ class Search extends Component {
                     <ul key = {nominations[index].imdbID}> 
 
                         {/* The index value of nominated movie is passed to remove nomination function */}
-                        <li key = {nominations[index].imdbID}  id = {nominations[index].imdbID}>  {nominations[index].Title} ({nominations[index].Year}) </li>
-                        <button onClick = {() => {this.removeNomination(index);}} id = "marginBottom8 inline"> Remove </button>
+                        <li key = {nominations[index].imdbID}  id="inline">  {nominations[index].Title} ({nominations[index].Year}) </li>
+                        <button onClick = {() => {this.removeNomination(index);}} className= "btn btn-light" id = "marginBottom8 inline lightButton"> Remove </button>
                     </ul>
                 ))}
             </React.Fragment>
         );
-    }
-    /**
-        * This function is used to update the sessionStorage so that each time the nomination list is updated, so is sessionStorage allowing the data to be saved even if page is reloaded
-    */
-    componentDidUpdate() {
-        // Allows me to set a value in sessionStorage so that upon refresh of page the nominated values will remain since they are stored in session storage and can be retrieved
-        sessionStorage.setItem("nominations", JSON.stringify(this.state.nominations));
     }
 
     /**
@@ -223,7 +218,7 @@ class Search extends Component {
                         {this.displaySearchResults()}
                         </div>
                         <div className = "col" id = "grid">
-                            <h2 id = "title marginBottom0">Nominations</h2>
+                            <h2 id = " marginBottom0">Nominations</h2>
                             <small id = "marginTop0">Only 5 nominations can be made</small>
                             {this.displayNominationList()}
                         </div>
