@@ -12,8 +12,7 @@ Link to the hosted project
 [Shopify Movie App](https://gord02.github.io/Shopify-Movie-App/)
 
 ### Running Locally
-Use command `npm start`
-Runs the app in the development mode.\
+Use command `npm start` to run the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### Technology
